@@ -1,0 +1,105 @@
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+// Function to check if the input is a C keyword
+int isKeyword(const char* input) {
+    // List of C keywords (you can extend this list as needed)
+    const char* keywords[] = {
+        "int", "float", "char", "if", "else", "while", "for", "return", "void", "break", "continue"
+    };
+    int num_keywords = sizeof(keywords) / sizeof(keywords[0]);
+
+    for (int i = 0; i < num_keywords; i++) {
+        if (strcmp(input, keywords[i]) == 0) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+// Function to check if the input is a valid identifier
+int isIdentifier(const char* input) {
+    // An identifier must start with a letter or an underscore and can be followed by letters, digits, or underscores.
+    if (!isalpha(input[0]) && input[0] != '_') {
+        return 0;
+    }
+    
+    for (int i = 1; i < strlen(input); i++) {
+        if (!isalnum(input[i]) && input[i] != '_') {
+            return 0;
+        }
+    }
+    return 1;
+}
+
+// Function to check if the input is a valid number
+int isNumber(const char* input) {
+    int i = 0;
+    // If the first character is a '-' or '+' sign, skip it
+    if (input[0] == '-' || input[0] == '+') {
+        i++;
+    }
+    
+    // Check if each character is a digit
+    while (input[i] != '\0') {
+        if (!isdigit(input[i])) {
+            return 0;
+        }
+        i++;
+    }
+    return 1;
+}
+
+// Function to check if the input is a valid operator
+int isOperator(char ch) {
+    // List of common C operators
+    char operators[] = "+-*/%=&|^!~<>";
+    
+    for (int i = 0; i < strlen(operators); i++) {
+        if (ch == operators[i]) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+int main(void) {
+    char input[100];
+    int criteria_met = 0;  // Flag to track how many criteria are met
+    
+    printf("Enter a string to check: ");
+    scanf("%s", input);
+    
+    // 1. Check if input is a keyword
+    if (isKeyword(input)) {
+        printf("'%s' is a C keyword\n", input);
+        criteria_met++;
+    }
+    
+    // 2. Check if input is a valid identifier
+    if (isIdentifier(input)) {
+        printf("'%s' is a valid identifier\n", input);
+        criteria_met++;
+    }
+    
+    // 3. Check if input is a number
+    if (isNumber(input)) {
+        printf("'%s' is a number\n", input);
+        criteria_met++;
+    }
+    
+    // 4. Check if input is an operator
+    if (strlen(input) == 1 && isOperator(input[0])) {
+        printf("'%s' is an operator\n", input);
+        criteria_met++;
+    }
+    
+    if (!criteria_met) {
+        printf("'%s' doesn't fit any of the specified criteria\n", input);
+    } else {
+        printf("The string fits %d of the specified criteria\n", criteria_met);
+    }
+    
+    return 0;
+}
